@@ -1,0 +1,22 @@
+spring:
+    application:
+        name: Jagent
+
+langchain4j:
+    open-ai:
+        chat-model:
+            api-key: 'sk-18c033b115434e8c838b32c2b17be8be'
+            base-url: 'https://api.deepseek.com'
+            model-name: 'deepseek-chat'
+            log-requests: true   #开启请求日志
+            log-responses: true  #开启返回日志
+        streaming-chat-model:
+            api-key: 'sk-18c033b115434e8c838b32c2b17be8be'
+            base-url: 'https://api.deepseek.com'
+            model-name: 'deepseek-chat'
+            log-requests: true   #开启请求日志
+            log-responses: true  #开启返回日志
+
+logging:
+    level:
+      dev.langchain4j: debug

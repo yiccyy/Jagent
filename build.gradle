@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.5'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'jc.chuan'
+version = '0.0.1-SNAPSHOT'
+description = 'Jagent'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    maven { url 'https://mirrors.cloud.tencent.com/maven/' }
+    mavenCentral()
+}
+
+dependencies {
+    // Lombok
+    implementation 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+
+    // LangChain4j启动类
+    implementation 'dev.langchain4j:langchain4j-open-ai-spring-boot-starter:1.0.1-beta6'
+    implementation 'dev.langchain4j:langchain4j-spring-boot-starter:1.0.1-beta6'
+
+    //流式输出依赖
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'dev.langchain4j:langchain4j-reactor:1.0.1-beta6'
+
+
+    //redis依赖
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
