@@ -16,14 +16,13 @@ import reactor.core.publisher.Flux;
     chatModel = "openAiChatModel",
     streamingChatModel = "openAiStreamingChatModel",
 //    chatMemory = "chatMemory"
-    chatMemoryProvider = "chatMemoryProvider"
+    chatMemoryProvider = "chatMemoryProvider"   //会话记忆提供者
+
 )
 public interface Assistant {
     //阻塞式
-//    @SystemMessage("You are a helpful assistant")
-    String chat(String message);
+    String chat(@MemoryId String sessionId, @UserMessage String message);
     //流式
-//    @SystemMessage(fromResource = "system.txt")
-    @SystemMessage("You are a helpful assistant")
-    Flux<String> chatStreaming(@MemoryId Integer memoryId,  @UserMessage String message);
+    @SystemMessage(fromResource = "system.txt")
+    Flux<String> chatStreaming(@MemoryId String memoryId,  @UserMessage String message);
 }

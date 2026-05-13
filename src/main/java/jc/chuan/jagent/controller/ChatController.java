@@ -18,21 +18,21 @@ public class ChatController {
     private Assistant assistant;
 
     @GetMapping("/chat")
-    public String chat(@RequestParam String message) {
+    public String chat(@RequestParam String sessionId, @RequestParam String message) {
         if (message == null || message.isBlank()) {
             return "";
         }
-        return assistant.chat(message);
+        return assistant.chat(sessionId, message);
     }
 
     @GetMapping("/chat/stream")
-    public SseEmitter chatStream(@RequestParam String message) {
+    public SseEmitter chatStream(@RequestParam String sessionId, @RequestParam String message) {
         SseEmitter emitter = new SseEmitter();
         if (message == null || message.isBlank()) {
             emitter.complete();
             return emitter;
         }
-        Flux<String> flux = assistant.chatStreaming(1, message);
+        Flux<String> flux = assistant.chatStreaming(sessionId, message);
         flux.subscribe(
             token -> {
                 try {

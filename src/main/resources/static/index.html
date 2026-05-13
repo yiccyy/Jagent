@@ -94,6 +94,23 @@
             color: #22c55e;
         }
 
+        .btn-new-session {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 4px 10px;
+            border-radius: 14px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-new-session:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
         .messages {
             flex: 1;
             overflow-y: auto;
@@ -297,6 +314,7 @@
             <span class="header-dot"></span>
             DeepSeek Chat
             <span class="header-right">
+                <button class="btn-new-session" id="newSessionBtn" title="新建会话">+ 新会话</button>
                 <button class="mode-toggle streaming" id="modeToggle" title="切换流式/非流式">
                     流式
                 </button>
@@ -340,6 +358,7 @@
         let abortController = null;
         let eventSource = null;
         let currentStreamBubble = null;
+        let sessionId = Date.now();
 
         function scrollToBottom() {
             messagesEl.scrollTop = messagesEl.scrollHeight;
@@ -401,7 +420,7 @@
 
         // ---- Non-streaming ----
         async function sendBlocking(text) {
-            const url = `/api/chat?message=${encodeURIComponent(text)}`;
+            const url = `/api/chat?sessionId=${sessionId}&message=${encodeURIComponent(text)}`;
             const res = await fetch(url, { signal: abortController.signal });
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             return await res.text();
@@ -410,7 +429,7 @@
         // ---- Streaming (EventSource) ----
         function sendStreaming(text, bubbleEl) {
             return new Promise((resolve, reject) => {
-                const url = `/api/chat/stream?message=${encodeURIComponent(text)}`;
+                const url = `/api/chat/stream?sessionId=${sessionId}&message=${encodeURIComponent(text)}`;
                 eventSource = new EventSource(url);
                 let firstToken = true;
                 let done = false;
@@ -502,6 +521,15 @@
             setSending(false);
         }
 
+        function newSession() {
+            sessionId = Date.now();
+            messagesEl.querySelectorAll('.message').forEach(el => el.remove());
+            const el = document.getElementById('streaming-bubble');
+            if (el) el.remove();
+            if (emptyHint) emptyHint.style.display = '';
+            inputEl.focus();
+        }
+
         // ---- Mode toggle ----
         modeToggle.addEventListener('click', () => {
             streamingMode = !streamingMode;
@@ -524,6 +552,7 @@
 
         sendBtn.addEventListener('click', send);
         stopBtn.addEventListener('click', stop);
+        newSessionBtn.addEventListener('click', newSession);
     </script>
 </body>
 </html>
