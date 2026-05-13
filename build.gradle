@@ -19,6 +19,15 @@ repositories {
     mavenCentral()
 }
 
+// 全局排除旧版 PDFBox/FontBox，强制使用 3.x
+//configurations.all {
+//    resolutionStrategy {
+//        force 'org.apache.pdfbox:pdfbox:3.0.4'
+//        force 'org.apache.fontbox:fontbox:3.0.4'
+//        force 'org.apache.pdfbox:xmpbox:3.0.4'
+//    }
+//}
+
 dependencies {
     // Lombok
     implementation 'org.projectlombok:lombok:1.18.34'
@@ -37,15 +46,20 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     //rag依赖
     implementation 'dev.langchain4j:langchain4j-easy-rag:1.0.1-beta6'
-    //文档解析器依赖
-    //pdf解析器
-    implementation 'dev.langchain4j:langchain4j-document-parser-apache-pdfbox:1.0.1-beta6'
-    //tika解析器（通用）
-    //implementation 'dev.langchain4j:langchain4j-document-parser-apache-tika:1.0.1-beta6'
+    implementation 'dev.langchain4j:langchain4j-document-parser-apache-tika:1.0.1-beta6'
+//    implementation 'dev.langchain4j:langchain4j-document-parser-apache-pdfbox'
+
+    //排除 PDFBox 传递依赖，手动添加 3.0.4
+//    implementation('dev.langchain4j:langchain4j-document-parser-apache-pdfbox:3.0.4') {
+//        exclude group: 'org.apache.pdfbox'
+//    }
 
     //redis search依赖
     implementation 'dev.langchain4j:langchain4j-community-redis-spring-boot-starter:1.0.1-beta6'
+    implementation 'dev.langchain4j:langchain4j-community-dashscope:1.0.1-beta6'
 
+    // 显式添加 PDFBox
+//    implementation 'org.apache.pdfbox:pdfbox:3.0.4'
 
 }
 
